@@ -1,0 +1,19 @@
+{
+    "name": "bstepanenko/routes-dashboard",
+    "description": "Compare route files for consistency with API, find definitions between routes, generate new API route file",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Bstepanenko\\RoutesDashboard\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "BohdanStepanenko",
+            "email": "stepanenko1905@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
