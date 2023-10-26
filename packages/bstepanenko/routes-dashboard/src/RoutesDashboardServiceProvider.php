@@ -13,7 +13,7 @@ class RoutesDashboardServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->make('Bstepanenko\RoutesDashboard\RouteDashboardController');
+        $this->app->make('Bstepanenko\RoutesDashboard\RoutesDashboardController');
     }
 
     /**
@@ -22,5 +22,15 @@ class RoutesDashboardServiceProvider extends ServiceProvider
     public function boot(): void
     {
         include __DIR__ . '/routes/web.php';
+
+        $this->loadViewsFrom(__DIR__ . '/resources/views', 'routes-dashboard');
+
+        $this->publishes([
+            __DIR__ . '/resources/assets' => public_path('vendor/routes-dashboard'),
+        ], 'public');
+
+        $this->publishes([
+            __DIR__ . '/resources/views' => resource_path('views/vendor/routes-dashboard'),
+        ]);
     }
 }

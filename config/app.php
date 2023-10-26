@@ -159,7 +159,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Bstepanenko\RoutesDashboard\RoutesDashboardServiceProvider::class,
+        \Bstepanenko\RoutesDashboard\RoutesDashboardServiceProvider::class,
 
         /*
          * Application Service Providers...
