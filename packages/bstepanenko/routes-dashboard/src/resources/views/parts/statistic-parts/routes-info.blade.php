@@ -1,37 +1,37 @@
 <div class="w-layout-cell countinfo">
     <div class="divcounter">
         <span class="fa-solid"></span>
-        <span class="countertext">Route files: 8</span>
+        <span class="countertext">Route files: {{ count($routesFilesList) }}</span>
     </div>
 </div>
 <div class="w-layout-cell countinfo">
     <div class="divcounter">
         <span class="fa-solid"></span>
-        <span class="countertext">Total routes: 583</span>
+        <span class="countertext">Total routes: {{ $routesCountInfo['total'] }}</span>
     </div>
 </div>
 <div class="w-layout-cell countinfo">
     <div class="divcounter">
         <span class="fa-solid"></span>
-        <span class="countertext">API routes: 168</span>
+        <span class="countertext">API routes: {{ $routesCountInfo['api'] }}</span>
     </div>
 </div>
 <div class="w-layout-cell countinfo">
     <div class="divcounter">
         <span class="fa-solid"></span>
-        <span class="countertext">Other routes: 415</span>
+        <span class="countertext">Other routes: {{ $routesCountInfo['other'] }}</span>
     </div>
 </div>
 <div class="w-layout-cell countinfo">
     <div class="divcounter">
         <span class="fa-solid"></span>
         <span class="countertext">Diff count: </span>
-        <span class="text-danger">261</span>
+        <span class="text-danger">{{ $routesCountInfo['diff'] }}</span>
     </div>
 </div>
 <div class="w-layout-cell countinfo">
     <div class="divcounter"><span class="fa-solid"></span>
         <span class="countertext">Missed routes: </span>
-        <span class="text-danger">6</span>
+        <span class="text-danger">{{ $routesCountInfo['missed'] }}</span>
     </div>
 </div>

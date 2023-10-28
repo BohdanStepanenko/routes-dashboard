@@ -12,11 +12,8 @@
                 <a href="#" target="_blank" aria-current="page" class="navigation-item w-nav-link w--current">
                     <span class="fa-icon-regular status-warning"></span>
                 </a>
-                <a href="https://github.com/" target="_blank" aria-current="page" class="navigation-item w-nav-link w--current">
+                <a href="https://github.com/" target="_blank" aria-current="page" class="navigation-item w-nav-link">
                     <span class="fa-brand"></span>
-                </a>
-                <a href="{{ URL::previous() }}" class="navigation-item w-nav-link">
-                    <span class="fa-icon-regular"></span>
                 </a>
             </nav>
         </div>
