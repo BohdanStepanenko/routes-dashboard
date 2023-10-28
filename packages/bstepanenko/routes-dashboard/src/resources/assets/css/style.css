@@ -170,12 +170,44 @@ optgroup {
 }
 
 table {
-    border-collapse: collapse;
     border-spacing: 0;
 }
 
 td, th {
     padding: 0;
+}
+
+tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.ep-table {
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    margin-top: 30px;
+    padding: 20px;
+}
+
+.ep-table td, .ep-table th {
+    text-align: center;
+    padding: 8px;
+    height: 50px;
+}
+
+.col-name {
+    color: #333333;
+    font-size: 16px;
+    font-weight: 700;
+    word-wrap: break-word
+}
+
+.table-header {
+    font-family: Monda, sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #333333;
+    text-align: center;
 }
 
 * {
@@ -189,7 +221,7 @@ html {
 body {
     min-height: 100%;
     color: #333;
-    background-color: #fff;
+    background-color: #f5f6f7;
     margin: 0;
     font-family: Arial, sans-serif;
     font-size: 14px;
@@ -1137,11 +1169,6 @@ textarea.w-input, textarea.w-select {
     bottom: -100%;
     left: -100%;
     right: -100%;
-}
-
-.w-background-video > video::-webkit-media-controls-start-playback-button {
-    -webkit-appearance: none;
-    display: none !important;
 }
 
 .w-background-video--control {
@@ -2093,8 +2120,8 @@ textarea.w-input, textarea.w-select {
 }
 
 body {
-    color: #1a1b1f;
-    font-family: Montserrat, sans-serif;
+    color: #6a6a6a;
+    font-family: Monda, sans-serif;
     font-size: 16px;
     font-weight: 400;
     line-height: 28px;
@@ -3192,7 +3219,7 @@ figcaption {
 }
 
 .text-danger {
-    color: #ed164e;
+    color: #ed164e80;
     text-align: center;
     object-fit: fill;
     flex: 0 auto;
@@ -3213,7 +3240,54 @@ figcaption {
 }
 
 .status-danger {
+    color: #ed164e80;
+}
+
+.method-get-color {
+    color: #12b878;
+}
+
+.method-post-color {
+    color: #ffe619;
+}
+
+.method-put-color {
+    color: #f9b737;
+}
+
+.method-delete-color {
     color: #ed164e;
+}
+
+.route-info {
+    color: #6A6A6A;
+    font-size: 16px;
+    font-family: Monda, sans-serif;
+    font-weight: 400;
+    word-wrap: break-word
+}
+
+.route-missed {
+    color: #ed164e;
+    background: #FBE7E8;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    display: table-cell;
+}
+
+.route-success {
+    color: #12b878;
+    background: #e7fbea;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    display: table-cell;
+}
+
+.route-chart {
+    width: auto;
+    height: 220px;
 }
 
 .routeslist {
@@ -3249,7 +3323,7 @@ figcaption {
     color: #6a6a6a;
     font-family: Monda, sans-serif;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .section-2 {
