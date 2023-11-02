@@ -6,5 +6,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="{{ asset('vendor/routes-dashboard/js/charts.js') }}"></script>
+<script src="{{ asset('vendor/routes-dashboard/js/main.js') }}"></script>
 </body>
 </html>
