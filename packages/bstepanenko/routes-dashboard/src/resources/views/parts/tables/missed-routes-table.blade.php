@@ -1,3 +1,4 @@
+@if($routesCountInfo['missed'] > 0)
 <section class="section">
     <div class="w-layout-blockcontainer container w-container">
         <table class="ep-table">
@@ -37,3 +38,4 @@
         </table>
     </div>
 </section>
+@endif

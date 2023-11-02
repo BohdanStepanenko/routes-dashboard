@@ -1,4 +1,6 @@
 @extends('routes-dashboard::layouts.app')
+@include('routes-dashboard::parts.modals.generate-modal')
+@include('routes-dashboard::parts.modals.health-modal')
 
 @section('content')
     @include('routes-dashboard::parts.statistic')
