@@ -101,6 +101,11 @@ code, kbd, pre, samp {
     font-size: 1em;
 }
 
+.code-container {
+    background-color: #f5f6f7;
+    border-radius: 12px;
+}
+
 button, input, optgroup, select, textarea {
     color: inherit;
     font: inherit;
@@ -180,6 +185,10 @@ td, th {
 tr:nth-child(even) {
     background-color: #ffffff;
 }
+code {
+    white-space: pre-wrap!important;
+    tab-size: 4!important;
+}
 
 .ep-table {
     width: 100%;
@@ -187,6 +196,7 @@ tr:nth-child(even) {
     white-space: nowrap;
     margin-top: 30px;
     padding: 20px;
+    background-color: #f5f6f7;
 }
 
 .ep-table td, .ep-table th {
@@ -2345,7 +2355,7 @@ figcaption {
     background-color: rgba(0, 0, 0, 0);
     border: 0 #6a6a6a;
     border-top-width: 1px;
-    border-bottom: 2px solid #6a6a6a;
+    border-bottom: 2px solid #bdc3c7;
     margin-right: 20px;
     padding: 0 0 5px;
     position: relative;
@@ -2515,6 +2525,7 @@ figcaption {
     padding: 9px 0 9px 0;
     font-size: 32px;
     font-weight: 500;
+    text-decoration: none!important;
     line-height: 20px;
 }
 
@@ -2543,11 +2554,119 @@ figcaption {
     color: #333333;
 }
 
+.modal-content-wrap {
+    background-color: #f5f6f7;
+    border: 3px solid #bdc3c7 !important;
+    border-radius: 12px;
+}
+
+.modal-xl {
+    min-width: 90%;
+}
+
+.modal-body-generate {
+    font-family: 'Monda', sans-serif;
+}
+
+.modal-header-info {
+    text-align: left;
+    font-size: 18px;
+    font-weight: 700;
+    color: #333333;
+    font-family: 'Monda', sans-serif;
+}
+
+.modal-body-info {
+    text-align: center;
+    font-size: 18px;
+    color: #333333;
+    font-family: 'Monda', sans-serif;
+}
+
 .logo-image {
     width: auto;
     height: 90px;
     flex: 0 auto;
     display: block;
+}
+
+.form-check-label {
+    text-transform: none;
+    font-size: 14px;
+    padding-left: 5px;
+}
+
+.toggle-input {
+    display: none;
+}
+
+.toggle-label {
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    background-color: #BDC3C7;
+    border-radius: 20px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.toggle-label::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    background-color: #f5f6f7;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translate(-50%, -50%);
+    transition: left 0.3s;
+}
+
+.toggle-input:checked + .toggle-label {
+    background-color: #12b878;
+}
+
+.toggle-input:checked + .toggle-label::after {
+    left: calc(100% - 10px);
+}
+
+.toggle-switch {
+    display: flex;
+}
+
+#copy-button {
+    font-family: 'Monda', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    background-color: #BDC3C7;
+    color: #f5f6f7;
+    border-radius: 12px;
+}
+
+#copy-button:focus {
+    outline: none;
+}
+
+.export-btn {
+    border: 3px solid #bdc3c7;
+    background-color: #f5f6f7;
+    font-family: 'Monda', sans-serif;
+    font-size: 14px;
+    color: #6a6a6a;
+    border-radius: 12px;
+    padding: 5px;
+}
+
+.postman-btn {
+    border: 3px solid #f9b737;
+    background-color: #f5f6f7;
+    font-family: 'Monda', sans-serif;
+    font-size: 14px;
+    color: #f9b737;
+    border-radius: 12px;
+    padding: 5px;
 }
 
 .navigation-items {
