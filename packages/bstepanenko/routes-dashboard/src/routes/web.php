@@ -7,4 +7,5 @@ Route::prefix('routes-dashboard')
     ->name('routes-dashboard.')
     ->group(function () {
         Route::get('/', [RoutesDashboardController::class, 'renderDashboardPage'])->name('dashboard');
-});
+        Route::get('/export', [RoutesDashboardController::class, 'export'])->name('export');
+    });
