@@ -2650,22 +2650,18 @@ figcaption {
 }
 
 .export-btn {
-    border: 3px solid #bdc3c7;
     background-color: #f5f6f7;
     font-family: 'Monda', sans-serif;
     font-size: 14px;
     color: #6a6a6a;
-    border-radius: 12px;
     padding: 5px;
 }
 
 .postman-btn {
-    border: 3px solid #f9b737;
-    background-color: #f5f6f7;
+    background-color: #f9b737;
     font-family: 'Monda', sans-serif;
     font-size: 14px;
-    color: #f9b737;
-    border-radius: 12px;
+    color: #ffffff!important;
     padding: 5px;
 }
 
