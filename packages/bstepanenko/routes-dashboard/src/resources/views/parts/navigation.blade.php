@@ -11,7 +11,7 @@
                 <a data-toggle="modal" data-target="#healthModal" class="navigation-item w-nav-link w--current">
                     <span class="fa-icon-regular status-{{ $healthStatusInfo['status'] }}"></span>
                 </a>
-                <a href="https://github.com/" target="_blank" aria-current="page" class="navigation-item w-nav-link w--current">
+                <a href="https://github.com/BohdanStepanenko/routes-dashboard" target="_blank" aria-current="page" class="navigation-item w-nav-link w--current">
                     <span class="fa-brand"></span>
                 </a>
             </nav>
