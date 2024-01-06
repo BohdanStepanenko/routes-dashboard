@@ -1,0 +1,9 @@
+{
+    "preset": "psr12",
+    "notPath": [
+        "config/filesystems.php",
+        "database",
+        "config",
+        "Middleware"
+    ]
+}
