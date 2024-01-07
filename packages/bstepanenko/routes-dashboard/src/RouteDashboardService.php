@@ -21,50 +21,67 @@ class RouteDashboardService
         $otherRoutesEndpoints = $this->getRoutesData($otherRoutes);
         $trimmedApiEndpoints = $this->trimApiEndpoints($apiRoutesUrls);
         $definitions = $this->findUnusedDefinitions($trimmedApiEndpoints, $otherRoutesEndpoints);
-        $summary = $this->getSummary($apiRoutesUrls, $otherRoutesEndpoints, $definitions);
-        $routesFilesList = $this->getRoutesFilesNamesList();
-        $summaryPercentage = $this->calculatePercentageOfSummary($summary);
 
-        return $summary;
+        return $this->getSummary($apiRoutesUrls, $otherRoutesEndpoints, $definitions);
     }
-//    public function handle(): void
-//    {
-//        $output = new ConsoleOutput();
-//        $table = $this->createTable($output, [
-//            '#',
-//            'Status',
-//            'Method',
-//            'Endpoint',
-//            'Comment',
-//            'Return Type',
-//            'Is View',
-//        ]);
-//        $tableMissed = $this->createTable($output, [
-//            '#',
-//            'Status',
-//            'Method',
-//            'Endpoint',
-//        ]);
-//
-//        $prefix = 'api';
-//
-//        [$apiRoutes, $otherRoutes] = $this->filterRoutesByPrefix(Route::getRoutes(), $prefix);
-//
-//        $apiRoutesUrls = $this->getRoutesData($apiRoutes);
-//        $otherRoutesEndpoints = $this->getRoutesData($otherRoutes);
-//        $trimmedApiEndpoints = $this->trimApiEndpoints($apiRoutesUrls);
-//        $definitions = $this->findUnusedDefinitions($trimmedApiEndpoints, $otherRoutesEndpoints);
-//        $summary = $this->getSummary($apiRoutesUrls, $otherRoutesEndpoints, $definitions);
-//
-//        if (count($definitions) > 0) {
-//            //            $this->printSummary($output, $summary);
-//            //            $this->renderTable($table, 'Difference between routes and API routes list', $definitions);
-//            //            $this->renderTable($tableMissed, 'Missed routes list', $definitions->where('status', false));
-//            $this->fillRouteFile($otherRoutesEndpoints); // @TODO: define of option - definitions or all routes
-//        } else {
-//            $output->writeln('<info>Definitions not found</info>');
-//        }
-//    }
+
+    public function getRoutesFilesNamesList(): array
+    {
+        $routeFiles = [];
+        $routeDirectory = base_path('routes');
+
+        $files = File::files($routeDirectory);
+
+        foreach ($files as $file) {
+            $routeFiles[] = $file->getFilename();
+        }
+
+        return $routeFiles;
+    }
+
+    public function calculatePercentageOfSummary(array $summary): array
+    {
+        $apiPercentage = (count($summary['apiEndpoints']) / count($summary['routes'])) * 100;
+        $otherPercentage = (count($summary['otherEndpoints']) / count($summary['routes'])) * 100;
+        $definitionPercentage = (count($summary['definitions']) / count($summary['routes'])) * 100;
+        $missedPercentage = (count(collect($summary['definitions'])->where('status', false)) / count($summary['routes'])) * 100;
+
+        return [
+            'apiPercentage' => round($apiPercentage, 2),
+            'otherPercentage' => round($otherPercentage, 2),
+            'definitionPercentage' => round($definitionPercentage, 2),
+            'missedPercentage' => round($missedPercentage, 2),
+        ];
+    }
+
+    public function getRoutesCountInfo(array $summary): array
+    {
+        return [
+            'total' => count($summary['routes']),
+            'api' => count($summary['apiEndpoints']),
+            'other' => count($summary['otherEndpoints']),
+            'diff' => count($summary['definitions']),
+            'missed' => count(collect($summary['definitions'])->where('status', false)),
+        ];
+    }
+
+    public function getHealthStatusInfo(array $percentage): array
+    {
+        return match (true) {
+            $percentage['missedPercentage'] > 50 => [
+                'status' => 'danger',
+                'tooltip' => 'Check missed routes, probably they are not used in your app'
+            ],
+            $percentage['otherPercentage'] > 50 || $percentage['definitionPercentage'] > 50 => [
+                'status' => 'warning',
+                'tooltip' => 'A lot of your app routes are not used as API route. Try to "Generate & Export"'
+            ],
+            default => [
+                'status' => 'success',
+                'tooltip' => 'Looks good! But you still can generate updated API routes file'
+            ]
+        };
+    }
 
     private function filterRoutesByPrefix(mixed $routes, string $prefix): array
     {
@@ -80,20 +97,6 @@ class RouteDashboardService
             $filteredApiRoutes,
             $filteredOtherRoutes,
         ];
-    }
-
-    private function getRoutesFilesNamesList(): array
-    {
-        $routeFiles = [];
-        $routeDirectory = base_path('routes');
-
-        $files = File::files($routeDirectory);
-
-        foreach ($files as $file) {
-            $routeFiles[] = $file->getFilename();
-        }
-
-        return $routeFiles;
     }
 
     private function getRoutesData(mixed $routes): Collection
@@ -235,6 +238,7 @@ class RouteDashboardService
     private function getGroupAndUngroupRoutesList(array $routesTextList, bool $withSubGroup = false): array
     {
         $groupedRoutes = $this->getGroupRoutes($routesTextList);
+
         if ($withSubGroup) {
             $subGroupedRoutes = $this->getWithSubgroups($groupedRoutes);
             $separatedSubGroups = $this->separateSubgroupRoutes($subGroupedRoutes);
@@ -267,7 +271,7 @@ class RouteDashboardService
     private function getWithSubgroups(array $groupedRoutes): array
     {
         $subGrouped = [];
-        $patternGroup = '/Route::\w+\(\'(\/[\w-]+)/';
+        $patternGroup = "/Route::\w+\('([^']+)'/";
         $patternMiddleware = '/->middleware\((.*?)\)/';
 
         foreach ($groupedRoutes as $groupName => $routes) {
@@ -372,6 +376,10 @@ class RouteDashboardService
 
     private function appendMiddlewaresAfterUngrouping(string $middlewares, string $route): string
     {
+        if ($middlewares == null) {
+            return $route;
+        }
+
         return str_replace(';', "->middleware({$middlewares});", $route);
     }
 
@@ -388,90 +396,31 @@ class RouteDashboardService
         ];
     }
 
-    private function calculatePercentageOfSummary(array $summary): array
-    {
-        $apiPercentage = (count($summary['apiEndpoints']) / count($summary['routes'])) * 100;
-        $otherPercentage = (count($summary['otherEndpoints']) / count($summary['routes'])) * 100;
-        $definitionPercentage = (count($summary['definitions']) / count($summary['routes'])) * 100;
-        $missedPercentage = (count(collect($summary['definitions'])->where('status', false)) / count($summary['routes'])) * 100;
-
-        return [
-            'apiPercentage' => round($apiPercentage, 2),
-            'otherPercentage' => round($otherPercentage, 2),
-            'definitionPercentage' => round($definitionPercentage, 2),
-            'missedPercentage' => round($missedPercentage, 2),
-        ];
-    }
-
-    private function printSummary(ConsoleOutput $output, array $summary): void
-    {
-        $output->writeln('<info>Definitions Found</info>');
-        $output->writeln('Total routes: ' . count($summary['routes']));
-        $output->writeln('API routes: ' . count($summary['apiEndpoints']));
-        $output->writeln('Other routes: ' . count($summary['otherEndpoints']));
-        $output->writeln('Missed routes: <error>' . count(collect($summary['definitions'])->where('status', false)) . '</error>');
-        $output->writeln('Definitions count: <error>' . count($summary['definitions']) . '</error>');
-        $output->writeln('');
-    }
-
-    private function createTable(ConsoleOutput $output, array $headers): Table
-    {
-        $table = new Table($output->section());
-        $table->setHeaders($headers);
-
-        return $table;
-    }
-
-    private function renderTable(Table $table, string $title, Collection $data): void
-    {
-        $table->setHeaderTitle("$title (" . count($data) . ')');
-        $loopStep = 1;
-        $tableData = [];
-
-        foreach ($data as $item) {
-            $tableData[] = [
-                'number' => $loopStep++,
-                'status' => $this->getStatusText($item['status']),
-                'method' => $item['method'],
-                'endpoint' => $item['url'],
-                'comment' => $item['comment'],
-                'returnType' => $item['returnType'],
-                'isView' => $this->getIsViewText($item['isView']),
-            ];
-        }
-
-        $table->setRows($tableData);
-        $table->render();
-    }
-
-    private function getStatusText(string $status): string
-    {
-        return $status ? '<info>Active</info>' : '<error>Missed</error>';
-    }
-
-    private function getIsViewText(bool $isView): string
-    {
-        return $isView ? '<error>Yes</error>' : '';
-    }
-
     /**
      * Generate new route file.
      */
-    private function fillRouteFile(Collection $routesList): void
+    public function fillRouteFile(Collection $routesList, bool $isView): void
     {
-        $routesToTextList = $this->convertApiRoutesToText($routesList, false); // TODO: add option to determine that view display needed
-        $groupAndUngroupRoutes = $this->getGroupAndUngroupRoutesList($routesToTextList, true);
-        $fileContent = $this->generateRouteFileContent($groupAndUngroupRoutes);
-
-        $filePath = base_path('routes/api-custom.php');
+        $fileContent = $this->generateFileContent($routesList, $isView);
+        $filePath = base_path('routes/api-generated.php');
 
         File::put($filePath, $fileContent);
     }
 
-    private function convertApiRoutesToText(Collection $routesList, bool $isView = false): array
+    public function generateFileContent(Collection $routesList, $isView): string
+    {
+        $routesToTextList = $this->convertApiRoutesToText($routesList, $isView);
+        $groupAndUngroupRoutes = $this->getGroupAndUngroupRoutesList($routesToTextList, true);
+
+        return $this->generateRouteFileContent($groupAndUngroupRoutes);
+    }
+
+    private function convertApiRoutesToText(Collection $routesList, bool $isView): array
     {
         $routesTextList = [];
-        $filteredRoutesForApi = $routesList->where('isView', $isView)
+        $filteredRoutesForApi = $routesList->when(!$isView, function ($query) {
+            return $query->where('isView', false);
+        })
             ->where('status', true)
             ->where('methodName', '!=', null);
 
@@ -531,11 +480,8 @@ class RouteDashboardService
                             } else {
                                 $fileContent .= "\t\t" . $subRoute . "\n";
                             }
-                        } else {
-
                         }
                     }
-//                    $fileContent .= "\t});\n\n";
                 } else {
                     $fileContent .= "\t\t" . $subRoutes . "\n";
                 }
@@ -560,8 +506,8 @@ class RouteDashboardService
             | Generated API Routes
             |--------------------------------------------------------------------------
             |
-            | Here is where you get generated API routes for your application. These
-            | routes consist all of your application routes converted to work with API.
+            | Here is where you get generated API routes for your application.
+            | These routes consist all of your application routes converted to work with API.
             |
             */
             EOD;
